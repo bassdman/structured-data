@@ -1,0 +1,33 @@
+{
+    "name": "databook",
+    "version": "1.0.0",
+    "description": "Visualize  and modify all kinds of data",
+    "main": "src/index.js",
+    "type": "module",
+    "scripts": {
+        "test": "npm run test",
+        "deploy": "node ./src/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bassdman/databook.git"
+    },
+    "keywords": [
+        "ui",
+        "data",
+        "databook"
+    ],
+    "author": "Manuel Gelsen",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/bassdman/databook/issues"
+    },
+    "homepage": "https://github.com/bassdman/databook#readme",
+    "devDependencies": {
+        "jasmine": "^3.6.1"
+    },
+    "dependencies": {
+        "deepmerge": "^4.2.2",
+        "tapable": "^2.0.0"
+    }
+}
