@@ -1,6 +1,5 @@
-import { HooksPlugin } from './plugins/hooks.plugin.js';
-import { DataStorePlugin } from './plugins/datastore.plugin.js';
-import { DataTypePlugin } from './plugins/datatype.plugin.js'
+import DefaultConfig from "./default.config.js";
+
 
 let ctx = { _fields: [] };
 
@@ -19,12 +18,8 @@ function addPlugin(plugin) {
     return ctx;
 }
 
-addPlugin(HooksPlugin);
-addPlugin(DataStorePlugin)
-addPlugin(DataTypePlugin());
-
-
 function Databook(config) {
+    addPlugin(DefaultConfig);
     return addPlugin(config);
 }
 

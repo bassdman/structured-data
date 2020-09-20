@@ -8,12 +8,15 @@ const databook = new Databook({
             type: 'number',
             min: 6
         },
-        transform: {
-            custom: function(val) {
-                return val - 2;
-            }
-        }
     }]
 })
 
+
+databook.on('change', 'test', function() {
+    console.log('bin drin')
+    console.log(...arguments)
+});
+
 databook.data.age = 10;
+databook.data.age = 5;
+databook.data.age = 3;
