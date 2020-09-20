@@ -6,7 +6,9 @@
     "type": "module",
     "scripts": {
         "test": "npm run test",
-        "deploy": "node ./src/index.js"
+        "deploy": "node ./src/index.js",
+        "testdeploy": "node ./dest/index.js"
+
     },
     "repository": {
         "type": "git",

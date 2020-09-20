@@ -26,6 +26,9 @@ class Hook {
     trigger(ctx) {
         throw new Error('Hook.trigger() must be overwritten');
     }
+    call() {
+        return this.trigger(...arguments)
+    }
 }
 
 class SyncHook extends Hook {
@@ -52,8 +55,11 @@ class SyncWaterfallHook extends Hook {
         const events = this.listeners();
 
         for (let event of events) {
+            if (result == null)
+                throw new Error('A listener in SyncWaterfallHook.trigger(context) returns null. This is not allowed. Did you forget returning sth in a listener?')
             result = event(result);
         }
+        return result;
     }
 }
 
@@ -65,6 +71,7 @@ class AsyncWaterfallHook extends Hook {
         for (let event of events) {
             result = await event(result);
         }
+        return result;
     }
 }
 

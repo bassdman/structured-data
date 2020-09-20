@@ -6,6 +6,7 @@ function HooksPlugin(ctx) {
         }
     }
     ctx.on = function(name, pluginname, fn) {
+        const hooks = name.split(" ");
         if (!ctx.hooks[name])
             throw new Error('Hook with name "' + name + '" does not exist. context.on(name, pluginname, fn) failed');
 
