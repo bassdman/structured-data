@@ -1,23 +1,15 @@
-import { hooks, data } from './datastore.js';
+import { HooksPlugin } from './plugins/hooks.plugin.js';
+import { DataStorePlugin } from './plugins/datastore.plugin.js';
+import { DataTypePlugin } from './plugins/datatype.plugin.js'
 
+let ctx = {};
 
-hooks.change.tap('test3', function(context) {
-    console.log('hi', context)
-    return 15;
-})
-
-/*data.def = 14;
-
-data.xyz = "hallo";
-
-data.xyz = 'warum';
-
-data.xyz = undefined;*/
-
-data.xyz = {
-    abc: {
-        def: 'hallo'
-    }
+function addPlugin(plugin) {
+    plugin(ctx);
 }
 
-data.xyz.abc.def = 'servus'
+addPlugin(HooksPlugin);
+addPlugin(DataStorePlugin)
+addPlugin(DataTypePlugin);
+
+export { addPlugin }
