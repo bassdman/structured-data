@@ -13,7 +13,17 @@ const Transformations = {
         transform: function(value, contextVal, ctx) {
             return contextVal(value, contextVal, ctx)
         }
-    }
+    },
+    lowercase: {
+        transform: function(value, contextVal, ctx) {
+            return value.toLowerCase();
+        }
+    },
+    uppercase: {
+        transform: function(value, contextVal, ctx) {
+            return value.toUpperCase();
+        }
+    },
 }
 
 export { Transformations }

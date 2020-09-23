@@ -9,29 +9,47 @@ import { Transformations } from "../libs/Transformations.js"
  * }]
  */
 function DataTypePlugin(conf) {
-    return function(ctx) {
-        ctx._validationMethods = Object.assign(ValidationMethods, ctx._validationMethods || {});
+    return {
+        init(ctx) {
+            ctx._validationMethods = Object.assign(ValidationMethods, ctx._validationMethods || {});
 
-        ctx.on('prechange', 'validateFields', function(context) {
-            const isValid = ctx._fields.filter(val => val.field == context.property).some(conf => {
+            ctx.on('prechange', 'validateFields', function(event) {
+                const isValid = ctx._fields.filter(val => val.field == event.property).some(conf => {
 
-                for (let rule of Object.keys(conf.rules || [])) {
-                    const value = conf.rules[rule];
-                    const validationEntry = ValidationMethods[rule];
-                    const validationFn = validationEntry.validate;
+                    const rules = initRules(conf.rules);
 
-                    if (!validationFn)
-                        throw new Error('There is no validationtype for "' + conf.type + '"')
+                    for (let rule of rules) {
+                        const validationEntry = ValidationMethods[rule.name];
 
-                    const result = validationFn(value, transform(context.newValue, conf), context);
+                        if (!validationEntry)
+                            throw new Error('There is no validationtype for "' + rule.name + '"')
 
-                    if (!result)
-                        throw validationEntry.errorMessage || `Validation failed for field "${conf.field}": Validationrule ${rule}:${value} failes. New value would be ${JSON.stringify(context.newValue)}`;
-                }
+                        const validationFn = validationEntry.validate;
+
+                        if (!validationFn)
+                            throw new Error('There is no validationtype for "' + conf.type + '"')
+
+                        const evt = {
+                            ruleName: rule.name,
+                            ruleValue: rule.value,
+                            contextValue: transform(event.newValue, conf),
+                            event,
+                            config: conf
+                        };
+
+                        if (evt.config.log)
+                            console.log(evt);
+
+                        const result = validationFn(evt);
+
+                        if (!result)
+                            throw validationEntry.errorMessage || `Validation failed for field "${conf.field}": Validationrule ${rule.name}:${rule.value} failes. New value would be ${JSON.stringify(event.newValue)}`;
+                    }
+                });
+
+                return isValid;
             });
-
-            return isValid;
-        });
+        }
     }
 }
 
@@ -51,6 +69,28 @@ function transform(value, field) {
         currentVal = transformationFn(currentVal, transformationValue, field);
     }
     return currentVal;
+}
+
+function initRules(rules) {
+    if (!Array.isArray(rules))
+        rules = [rules];
+
+    let returnRules = [];
+
+    for (let rule of rules) {
+        if (rule == null)
+            return [];
+
+        if (typeof rule == 'string') {
+            returnRules.push({ name: rule, value: true });
+        } else if (typeof rule == 'object') {
+            const keys = Object.keys(rule);
+            for (let key of keys) {
+                returnRules.push({ name: key, value: rule[key] })
+            }
+        }
+    };
+    return returnRules;
 }
 
 export { DataTypePlugin }

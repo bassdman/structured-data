@@ -1,5 +1,4 @@
-function HooksPlugin(ctx) {
-    ctx.hooks = {};
+function InitHooksPlugin(ctx) {
     ctx.addHooks = function(obj) {
         for (let key of Object.keys(obj)) {
             ctx.hooks[key] = obj[key];
@@ -14,4 +13,4 @@ function HooksPlugin(ctx) {
     }
 }
 
-export { HooksPlugin }
+export { InitHooksPlugin }

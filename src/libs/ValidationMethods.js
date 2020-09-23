@@ -1,53 +1,76 @@
 const ValidationMethods = {
     type: {
-        validate: function(valueRule, valueContext, ctx) {
-            return typeof valueContext == valueRule;
+        validate: function(event) {
+            if (event.ruleValue.toLowerCase() == 'array')
+                return Array.isArray(event.contextValue);
+
+            return typeof event.contextValue == event.ruleValue;
         }
     },
     max: {
-        validate: function(valueRule, valueContext, ctx) {
-            return valueContext <= valueRule;
+        validate: function(event) {
+            return event.contextValue <= event.ruleValue;
         }
     },
     min: {
-        validate: function(valueRule, valueContext, ctx) {
-            return valueContext >= valueRule;
+        validate: function(event) {
+            return event.contextValue >= event.ruleValue;
         }
     },
     minlength: {
-        validate: function(valueRule, valueContext, ctx) {
-            return valueContext && valueContext.length >= valueRule;
+        validate: function(event) {
+            return event.contextValue && event.contextValue.length >= event.ruleValue;
         }
     },
     maxlength: {
-        validate: function(valueRule, valueContext, ctx) {
-            return valueContext && valueContext.length <= valueRule;
+        validate: function(event) {
+            return event.contextValue && event.contextValue.length <= event.ruleValue;
         }
     },
     pattern: {
-        validate: function(valueRule, valueContext, ctx) {
-            return valueContext && valueContext.match(valueRule);
+        validate: function(event) {
+            return event.contextValue && event.contextValue.match(event.ruleValue);
         }
     },
     custom: {
-        validate: function(valueRule, valueContext, ctx) {
-            return valueContext && valueContext(valueRule, valueContext, ctx);
+        validate: function(event) {
+            return event.contextValue && event.contextValue(event);
         }
     },
     isNull: {
-        validate: function(valueRule, valueContext, ctx) {
-            if (valueRule)
-                return !valueContext;
+        validate: function(event) {
+            if (event.ruleValue)
+                return !event.contextValue;
             else
                 return ctx.value;
         }
     },
     isNotNull: {
-        validate: function(valueRule, valueContext, ctx) {
-            if (valueRule)
-                return valueContext;
+        validate: function(event) {
+            if (event.ruleValue)
+                return event.contextValue;
             else
                 return !ctx.value;
+        }
+    },
+    inList: {
+        validate: function(event) {
+            return event.ruleValue.includes(event.contextValue);
+        }
+    },
+    notInList: {
+        validate: function(event) {
+            return !event.ruleValue.includes(event.contextValue);
+        }
+    },
+    contains: {
+        validate: function(event) {
+            return event.contextValue.includes(event.ruleValue);
+        }
+    },
+    notContains: {
+        validate: function(event) {
+            return !event.contextValue.includes(event.ruleValue);
         }
     },
 }

@@ -52,7 +52,9 @@ function DataStorePlugin(ctx) {
     });
 
     ctx.data = proxiedData(ctx);
-
+    return {
+        data: proxiedData(ctx)
+    }
 }
 
 function proxiedData(ctx) {
@@ -78,7 +80,6 @@ function proxiedData(ctx) {
             let value = target[key]
             if (value !== undefined && key !== '__rootTarget') {
                 if (typeof value === 'object') {
-                    console.log(value)
                     value.__rootKey = getRootKey(target.__rootKey, key);
 
                     return new Proxy(value, proxyConfig)
