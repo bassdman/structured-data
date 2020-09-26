@@ -15,6 +15,7 @@ function DataTypePlugin(conf) {
 
     return {
         name: 'DataTypePlugin',
+        allowKeys: ['validationMethods', 'fields', 'transformations'],
         hooks: {
             initPlugin: function(config, ctx) {
                 if (config.validationMethods)

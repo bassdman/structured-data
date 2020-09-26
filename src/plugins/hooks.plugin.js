@@ -1,6 +1,7 @@
 function InitHooksPlugin(ctx) {
     return {
         name: 'InitHooksPlugin',
+        allowKeys: ['addHooks', 'hooks'],
         hooks: {
             initPlugin: function(config, ctx) {
                 if (config.addHooks) {

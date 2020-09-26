@@ -46,6 +46,7 @@ function getRootKey(target, current) {
 function DataStorePlugin(config) {
     return {
         name: 'DataStorePlugin',
+        allowKeys: ['data'],
         addHooks: {
             changeContext: new SyncWaterfallHook(),
             prechange: new SyncBreakableHook(),
