@@ -12,6 +12,11 @@ const DefaultValidationMethods = {
             return event.contextValue <= event.ruleValue;
         }
     },
+    equals: {
+        validate: function(event) {
+            return event.contextValue === event.ruleValue;
+        }
+    },
     min: {
         validate: function(event) {
             return event.contextValue >= event.ruleValue;

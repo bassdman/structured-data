@@ -11,6 +11,12 @@ const structuredData = await StructuredData({
             ],
         },
         {
+            field: 'test',
+            rules: [
+                { equals: '   test   ' },
+            ],
+        },
+        {
             field: 'roommates',
             log: true,
             rules: [
@@ -33,6 +39,7 @@ structuredData.on('change', 'test', function(ctx) {
 });
 
 structuredData.data.age = 10;
+structuredData.data.test = "test";
 
 structuredData.data.roommates = ['a', 'b', 'c', 'd']
     //structuredData.data.age = 5;

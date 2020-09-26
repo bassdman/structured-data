@@ -16,6 +16,28 @@ function DataTypePlugin(conf) {
     return {
         name: 'DataTypePlugin',
         allowKeys: ['validationMethods', 'fields', 'transformations'],
+        init(config, ctx) {
+            return {
+                addFields(conf) {
+                    if (Array.isArray(conf))
+                        fields.push(...conf);
+                    else
+                        fields.push(conf);
+                },
+                addTransformations(conf) {
+                    if (Array.isArray(conf))
+                        transformations.push(...conf);
+                    else
+                        transformations.push(conf);
+                },
+                addValidationMethods(conf) {
+                    if (Array.isArray(conf))
+                        validationMethods.push(...conf);
+                    else
+                        validationMethods.push(conf);
+                }
+            }
+        },
         hooks: {
             initPlugin: function(config, ctx) {
                 if (config.validationMethods)

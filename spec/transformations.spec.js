@@ -1,22 +1,55 @@
-describe("Dombee.addPlugin", function() {
+import { StructuredData } from './generated/index.js';
 
-    beforeEach(function() {
-        Dombee.reset();
+const _fields = {};
+
+async function proove(_conf) {
+    if (_fields[_conf.field])
+        throw 'Field with name "' + _conf.field + '" is already used in this test. Use anotherone.';
+    _fields[_conf.field] = true;
+
+    const conf = Object.assign({}, {
+        value: 'test',
+        rulesValue: 'test'
+    }, _conf);
+
+    const structuredData = await StructuredData({
+        fields: [{
+            field: conf.field,
+            transform: conf.transform,
+            rules: [
+                { equals: conf.rulesValue },
+            ],
+        }]
     });
 
-    it("should exist as a function", function() {
-        expect(typeof Dombee.addPlugin).toEqual('function');
+    structuredData.data[conf.field] = conf.value;
+
+    return structuredData;
+}
+
+describe("Transformations: ", function() {
+
+
+    describe("general:", function() {
+        it('fieldvalue "test" should be valid if no transformation applied', async function() {
+            expect(async function() {
+                await proove({ field: 'test' })
+            }).not.toThrow();
+
+        })
     });
-    it("should execute a function given as first parameter", function() {
-        const spyFunction = jasmine.createSpy('plugin')
-        Dombee.addPlugin(spyFunction);
-        Dombee({});
-        expect(spyFunction).toHaveBeenCalled();
+
+    describe("for every transformation::", function() {
+        it('fieldvalue "   test    " should be not valid if no transformation applied', async function() {
+            expect(async function() {
+                await proove({ field: 'test2', value: '   value    ' });
+            }).not.toThrow();
+        })
     });
-    it("plugin function should have Dombee Object as first parameter", function() {
-        const spyFunction = jasmine.createSpy('plugin')
-        Dombee.addPlugin(spyFunction);
-        Dombee({});
-        expect(spyFunction).toHaveBeenCalledWith(Dombee);
+
+    describe("Trim()", function() {
+
     });
+
+
 });

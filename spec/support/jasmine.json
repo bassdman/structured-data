@@ -2,8 +2,8 @@
     "spec_dir": "./",
 
     "spec_files": [
-        "**/*[sS]pec.js",
-        "!**/*nospec.js",
+        "**/*[sS]pec.cjs",
+        "!**/*nospec.cjs",
         "!node_modules/**"
     ],
 
