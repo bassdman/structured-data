@@ -1,4 +1,6 @@
 import { StructuredData } from './generated/index.js';
+import { throwsErrors } from './generated/throwsErrors.js';
+
 
 const _fields = {};
 
@@ -41,9 +43,9 @@ describe("Transformations: ", function() {
 
     describe("for every transformation::", function() {
         it('fieldvalue "   test    " should be not valid if no transformation applied', async function() {
-            expect(async function() {
-                await proove({ field: 'test2', value: '   value    ' });
-            }).not.toThrow();
+            const errorThrown = await throwsErrors(() => proove({ field: 'test2', value: '   value    ' }));
+
+            expect(errorThrown).toBeTrue();
         })
     });
 

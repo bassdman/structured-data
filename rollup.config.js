@@ -6,7 +6,7 @@ import commonjs from '@rollup/plugin-commonjs';
 const plugins = [commonjs(), resolve()];
 
 export default [{
-    input: ['src/index.js'],
+    input: ['src/index.js', 'spec/helpers/throwsErrors.js'],
     plugins,
     output: [{
         dir: 'spec/generated/',
