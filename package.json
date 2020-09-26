@@ -1,30 +1,30 @@
 {
-    "name": "databook",
+    "name": "structured-data",
     "version": "1.0.0",
     "description": "Visualize  and modify all kinds of data",
     "main": "src/index.js",
     "type": "module",
     "scripts": {
-        "test": "npm run test",
+        "test": "jasmine",
         "deploy": "node ./src/index.js",
         "testdeploy": "node ./dest/index.js"
 
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/bassdman/databook.git"
+        "url": "git+https://github.com/bassdman/structured-data.git"
     },
     "keywords": [
         "ui",
         "data",
-        "databook"
+        "structured-data"
     ],
     "author": "Manuel Gelsen",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/bassdman/databook/issues"
+        "url": "https://github.com/bassdman/structured-data/issues"
     },
-    "homepage": "https://github.com/bassdman/databook#readme",
+    "homepage": "https://github.com/bassdman/structured-data#readme",
     "devDependencies": {
         "jasmine": "^3.6.1"
     },

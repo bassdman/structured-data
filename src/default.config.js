@@ -13,7 +13,7 @@ const DefaultConfig = {
                 allowKeys: ['keyx']
             } to the config.
 
-            Adds databook.on() and databook.addHooks() to the interface
+            Adds structuredData.on() and structuredData.addHooks() to the interface
         */
         ValidateConfigPlugin(),
 
@@ -23,7 +23,7 @@ const DefaultConfig = {
                 addHooks: { foo: 'bar' }
             } to the config.
 
-            Adds databook.on() and databook.addHooks() to the interface
+            Adds structuredData.on() and structuredData.addHooks() to the interface
         */
         InitHooksPlugin(),
 
@@ -32,7 +32,7 @@ const DefaultConfig = {
                 data: anydata
             } to the config.
 
-            Adds databook.data to the interface
+            Adds structuredData.data to the interface
         */
         DataStorePlugin(),
 

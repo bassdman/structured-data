@@ -1,7 +1,7 @@
-import { Databook } from '../src/index.js';
+import { StructuredData } from '../src/index.js';
 
 
-const databook = await Databook({
+const structuredData = await StructuredData({
     fields: [{
             field: 'age',
             rules: [
@@ -27,13 +27,13 @@ const databook = await Databook({
     ]
 });
 
-databook.on('change', 'test', function(ctx) {
+structuredData.on('change', 'test', function(ctx) {
     //console.log(...arguments)
     console.log('wird geaendert', ctx)
 });
 
-databook.data.age = 10;
+structuredData.data.age = 10;
 
-databook.data.roommates = ['a', 'b', 'c', 'd']
-    //databook.data.age = 5;
-    //databook.data.age = 3;
+structuredData.data.roommates = ['a', 'b', 'c', 'd']
+    //structuredData.data.age = 5;
+    //structuredData.data.age = 3;

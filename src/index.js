@@ -36,7 +36,7 @@ async function addPlugin(conf, ctx) {
     return ctx;
 }
 
-async function Databook(config = {}) {
+async function StructuredData(config = {}) {
     let ctx = {
         plugins: [],
         config,
@@ -48,7 +48,7 @@ async function Databook(config = {}) {
     };
 
     if (!config.name)
-        config.name = 'Databook';
+        config.name = 'StructuredData';
 
     await addPlugin(DefaultPlugin, ctx);
     await addPlugin(config, ctx);
@@ -61,4 +61,4 @@ async function Databook(config = {}) {
     return ctx;
 }
 
-export { Databook }
+export { StructuredData }
