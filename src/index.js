@@ -1,7 +1,7 @@
 import { DefaultConfig as DefaultPlugin } from './default.config.js';
 import { AsyncHook } from './libs/hooks.js';
 
-async function addPlugin(conf, globalConfig, ctx) {
+async function addPlugin(conf, ctx) {
     if (!conf.name)
         throw `Plugin ${JSON.stringify(conf)} has no name. Please define a name by adding an attribute name:"pluginname" to your plugin.`;
 
@@ -15,7 +15,7 @@ async function addPlugin(conf, globalConfig, ctx) {
     ctx.plugins.push(conf);
 
     if (conf.init) {
-        conf.init(conf, globalConfig, ctx);
+        conf.init(conf, ctx);
     }
 
     if (conf.hooks && conf.hooks.initPlugin) {
@@ -23,7 +23,7 @@ async function addPlugin(conf, globalConfig, ctx) {
     }
 
     for (let _plugin of conf.plugins || []) {
-        addPlugin(_plugin, globalConfig, ctx);
+        addPlugin(_plugin, ctx);
     }
 
     return ctx;
@@ -31,25 +31,25 @@ async function addPlugin(conf, globalConfig, ctx) {
 
 async function Databook(config = {}) {
     let ctx = {
-        _fields: [],
         plugins: [],
         config,
         hooks: {
-            applyPlugin: new AsyncHook(),
+            pluginsInitialized: new AsyncHook(),
             initPlugin: new AsyncHook(),
-            init: new AsyncHook(),
         }
     };
 
     if (!config.name)
         config.name = 'Databook';
 
-    await addPlugin(DefaultPlugin, config, ctx);
-    await addPlugin(config, config, ctx);
+    await addPlugin(DefaultPlugin, ctx);
+    await addPlugin(config, ctx);
 
     for (let _plugin of ctx.plugins) {
         await ctx.hooks.initPlugin.call(_plugin, ctx);
     }
+
+    ctx.hooks.pluginsInitialized.call(ctx);
     return ctx;
 }
 
