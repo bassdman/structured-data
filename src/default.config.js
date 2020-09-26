@@ -1,20 +1,10 @@
 import { InitHooksPlugin } from './plugins/hooks.plugin.js';
-import { GlobalsPlugin } from './plugins/globals.plugin.js'
 import { DataStorePlugin } from './plugins/datastore.plugin.js';
 import { DataTypePlugin } from './plugins/datatype.plugin.js'
 
 const DefaultConfig = {
     name: 'DefaultPlugins',
     plugins: [
-        /*
-            Enables adding {
-                globals: {
-                    foo: 'bar'
-                }
-            } to the config.
-        */
-        GlobalsPlugin(),
-
         /*
             Enables adding {
                 hooks: {

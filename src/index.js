@@ -15,7 +15,14 @@ async function addPlugin(conf, ctx) {
     ctx.plugins.push(conf);
 
     if (conf.init) {
-        conf.init(conf, ctx);
+        const globals = await conf.init(conf, ctx);
+
+        if (!globals._context && typeof globals == 'object') {
+            for (let key of Object.keys(globals) || {}) {
+                ctx[key] = globals[key];
+            }
+        }
+
     }
 
     if (conf.hooks && conf.hooks.initPlugin) {
@@ -33,6 +40,7 @@ async function Databook(config = {}) {
     let ctx = {
         plugins: [],
         config,
+        _context: true,
         hooks: {
             pluginsInitialized: new AsyncHook(),
             initPlugin: new AsyncHook(),

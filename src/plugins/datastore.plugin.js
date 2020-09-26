@@ -71,8 +71,10 @@ function DataStorePlugin(config) {
             }
         },
         init: function(ctx) {
-            ctx.data = proxiedData(ctx);
-            return ctx;
+            return {
+                data: proxiedData(ctx)
+            }
+
         }
     }
 }
