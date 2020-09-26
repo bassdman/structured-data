@@ -44,7 +44,7 @@ class AsyncHook extends Hook {
     async trigger(ctx) {
         const events = this.listeners();
         for (let event of events) {
-            await event(ctx);
+            await event(...arguments);
         }
     }
 }

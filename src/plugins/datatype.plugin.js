@@ -1,5 +1,5 @@
-import { ValidationMethods } from "../libs/ValidationMethods.js";
-import { Transformations } from "../libs/Transformations.js"
+import { DefaultValidationMethods } from "../libs/ValidationMethods.js";
+import { DefaultTransformations } from "../libs/Transformations.js"
 
 /**
  * 
@@ -9,17 +9,30 @@ import { Transformations } from "../libs/Transformations.js"
  * }]
  */
 function DataTypePlugin(conf) {
-    return {
-        init(ctx) {
-            ctx._validationMethods = Object.assign(ValidationMethods, ctx._validationMethods || {});
+    let fields = [];
+    let validationMethods = DefaultValidationMethods;
+    let transformations = DefaultTransformations;
 
-            ctx.on('prechange', 'validateFields', function(event) {
-                const isValid = ctx._fields.filter(val => val.field == event.property).some(conf => {
+    return {
+        name: 'DataTypePlugin',
+        hooks: {
+            initPlugin: function(config, ctx) {
+                if (config.validationMethods)
+                    validationMethods = Object.assign(ValidationMethods, config.validationMethods);
+
+                if (config.fields)
+                    fields.push(...config.fields);
+
+                if (config.transformations)
+                    transformations = Object.assign(transformations, config.transformations);
+            },
+            prechange: function(event) {
+                const isValid = fields.filter(val => val.field == event.property).some(conf => {
 
                     const rules = initRules(conf.rules);
 
                     for (let rule of rules) {
-                        const validationEntry = ValidationMethods[rule.name];
+                        const validationEntry = validationMethods[rule.name];
 
                         if (!validationEntry)
                             throw new Error('There is no validationtype for "' + rule.name + '"')
@@ -32,7 +45,7 @@ function DataTypePlugin(conf) {
                         const evt = {
                             ruleName: rule.name,
                             ruleValue: rule.value,
-                            contextValue: transform(event.newValue, conf),
+                            contextValue: transform(event.newValue, conf, transformations),
                             event,
                             config: conf
                         };
@@ -48,18 +61,18 @@ function DataTypePlugin(conf) {
                 });
 
                 return isValid;
-            });
-        }
+            }
+        },
     }
 }
 
-function transform(value, field) {
+function transform(value, field, transformations) {
     if (field.transform === undefined)
         return value;
 
     let currentVal = value;
     for (let transformationKey of Object.keys(field.transform)) {
-        const transformationConfig = Transformations[transformationKey];
+        const transformationConfig = transformations[transformationKey];
         const transformationValue = field.transform[transformationKey];
         const transformationFn = transformationConfig.transform;
 
@@ -93,4 +106,34 @@ function initRules(rules) {
     return returnRules;
 }
 
-export { DataTypePlugin }
+function ruleMatches(rule, event) {
+    const validationEntry = ValidationMethods[rule.name];
+
+    if (!validationEntry)
+        throw new Error('There is no validationtype for "' + rule.name + '"')
+
+    const validationFn = validationEntry.validate;
+
+    if (!validationFn)
+        throw new Error('There is no validationtype for "' + conf.type + '"')
+
+    const evt = {
+        ruleName: rule.name,
+        ruleValue: rule.value,
+        contextValue: transform(event.newValue, conf),
+        event,
+        config: conf
+    };
+
+    if (evt.config.log)
+        console.log(evt);
+
+    const result = validationFn(evt);
+
+    if (!result)
+        throw validationEntry.errorMessage || `Validation failed for field "${conf.field}": Validationrule ${rule.name}:${rule.value} failes. New value would be ${JSON.stringify(event.newValue)}`;
+
+    return result;
+}
+
+export { DataTypePlugin, ruleMatches }

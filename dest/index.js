@@ -14,8 +14,14 @@ const databook = await Databook({
             field: 'roommates',
             log: true,
             rules: [
+                /*{
+                                or: [
+                                    { type: 'array' },
+                                    { contains: 'f' },
+                                ]
+                            }*/
                 { type: 'array' },
-                { contains: 'f' },
+                { contains: 'c' },
             ],
         }
     ]

@@ -43,21 +43,41 @@ function getRootKey(target, current) {
 }
 
 
-function DataStorePlugin(ctx) {
-    ctx.addHooks({
-        changeContext: new SyncWaterfallHook(),
-        prechange: new SyncBreakableHook(),
-        change: new SyncHook(),
-        postChange: new SyncHook()
-    });
-
-    ctx.data = proxiedData(ctx);
+function DataStorePlugin(config) {
     return {
-        data: proxiedData(ctx)
+        name: 'DataStorePlugin',
+        addHooks: {
+            changeContext: new SyncWaterfallHook(),
+            prechange: new SyncBreakableHook(),
+            change: new SyncHook(),
+            postChange: new SyncHook()
+        },
+        hooks: {
+            initPlugin: async function(config, ctx) {
+                let data;
+                if (!config.data) {
+                    data = {};
+                } else if (config.data.then) {
+                    data = await config.data;
+                } else if (typeof config.data == 'object' && !Array.isArray(config.data)) {
+                    data = config.data;
+                } else if (typeof config.data == 'function') {
+                    data = await config.data(config, ctx);
+                } else {
+                    throw 'Error: config.data can not be resolved, it should be undefined, a promise, an object or a function that returns an object - but it is none of these.';
+                }
+
+                ctx.data = proxiedData(ctx, data);
+            }
+        },
+        init: function(ctx) {
+            ctx.data = proxiedData(ctx);
+            return ctx;
+        }
     }
 }
 
-function proxiedData(ctx) {
+function proxiedData(ctx, initialData = {}) {
     const proxyConfig = {
         set(target, key, value) {
             const proxiedValue = value;
@@ -102,7 +122,7 @@ function proxiedData(ctx) {
         },
     };
 
-    const data = new Proxy({}, proxyConfig);
+    const data = new Proxy(initialData, proxyConfig);
     return data;
 }
 

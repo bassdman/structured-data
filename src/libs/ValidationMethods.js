@@ -1,4 +1,4 @@
-const ValidationMethods = {
+const DefaultValidationMethods = {
     type: {
         validate: function(event) {
             if (event.ruleValue.toLowerCase() == 'array')
@@ -73,8 +73,16 @@ const ValidationMethods = {
             return !event.contextValue.includes(event.ruleValue);
         }
     },
+    or: {
+        validate: function(event) {
+            console.log(event)
+            return event.ruleValue.some(rule => {
+
+            });
+        }
+    }
 }
 
 
 
-export { ValidationMethods }
+export { DefaultValidationMethods }

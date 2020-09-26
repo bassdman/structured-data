@@ -1,4 +1,4 @@
-const Transformations = {
+const DefaultTransformations = {
     trim: {
         transform: function(value, contextVal, ctx) {
             return value.trim()
@@ -26,4 +26,4 @@ const Transformations = {
     },
 }
 
-export { Transformations }
+export { DefaultTransformations }
